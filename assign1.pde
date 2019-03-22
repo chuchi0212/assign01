@@ -11,10 +11,11 @@ PImage soldier;
 float robotX, robotY;
 float soldierX, soldierY;
 float laserX , laserY;
-float laserXStart , laserXfinal;
+float laserXStart , laserXFinal;
 float laserXMove = 0;
-float laserMaxWidth = 40;
-float laserWidth = 0;
+float laserMaxLength = 40;
+float laserPosition;
+float laserSpeed = 2;
 
 
 float heartWidth = 50;
@@ -30,7 +31,7 @@ void setup() {
   soldier = loadImage("img/soldier.png");
   
   //sodier Y position
-  soldierY = floor(random(3,6))*80;
+  soldierY = floor(random(2,6))*80;
   
   //robot position
   robotX = random(160,560);
@@ -52,7 +53,7 @@ void setup() {
   strokeWeight(5);
   stroke(255,255,0);
   fill(253,184,19);
-  ellipse(600,50,120,120);
+  ellipse(590,50,120,120);
   
   
 }
@@ -68,27 +69,25 @@ void draw() {
   image(heart,50+2*heartWidth,10); // heart3
 
   //soldier
-  image(soldier,soldierX,soldierY);
+  image(soldier, soldierX - 80, soldierY);
   soldierX += 4;
-  soldierX %= 720;
+  soldierX %= 800;
   
   //robot
   image(robot,robotX,robotY);
   
   //laser
-  strokeWeight(10);
-  stroke(255,0,0); //color red
-  line(laserXStart,laserY,laserXfinal,laserY);
-  laserWidth = min(laserWidth+1,laserMaxWidth);
-  laserX = robotX+25;
-  laserXMove += 2;
-  laserY = robotY+37;
-  laserXStart = laserX-laserXMove;
-  laserXfinal = laserXStart-laserWidth;
-  if(laserXMove > 160){
-    laserXMove=0;
-    laserWidth=0;
-     
+  laserPosition -= 2;
+  if(laserPosition < -185){
+    laserPosition = 0;
   }
   
+  strokeWeight(10);
+  stroke(255,0,0); //color red
+  laserX = robotX + 25;
+  laserY = robotY + 37;
+  laserXStart = min (laserX, laserX + laserPosition);
+  laserXFinal = min (laserX, laserXStart + laserMaxLength);
+  line(laserXStart,laserY,laserXFinal,laserY);
+
 }
